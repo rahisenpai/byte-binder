@@ -1,0 +1,288 @@
+{
+	// Place your snippets for cpp here. Each snippet is defined under a snippet name and has a prefix, body and 
+	// description. The prefix is what is used to trigger the snippet and the body will be expanded and inserted. Possible variables are:
+	// $1, $2 for tab stops, $0 for the final cursor position, and ${1:label}, ${2:another} for placeholders. Placeholders with the 
+	// same ids are connected.
+	// Example:
+	// "Print to console": {
+	// 	"prefix": "log",
+	// 	"body": [
+	// 		"console.log('$1');",
+	// 		"$2"
+	// 	],
+	// 	"description": "Log output to console"
+	// }
+
+	"ordered_set from gnu_pbds": {
+		"prefix": "sfpbds",
+		"body": [
+			"#include <ext/pb_ds/assoc_container.hpp>",
+			"#include <ext/pb_ds/tree_policy.hpp>",
+			"using namespace __gnu_pbds;",
+			"typedef tree<ll, null_type, less<ll>, rb_tree_tag, tree_order_statistics_node_update> oset;"
+		],
+		"description": "ordered_set from gnu_pbds"
+	},
+
+	"binary exponentiation": {
+		"prefix": "sfbinexp",
+		"body": [
+			"int binexp(int base, int exp) {",
+			"    int res = 1;",
+			"    while(exp) {",
+			"        if(exp & 1) {",
+			"            res = 1ll * res * base % mod;",
+			"        }",
+			"        base = 1ll * base * base % mod;",
+			"        exp >>= 1;",
+			"    }",
+			"    return res;",
+			"}"
+		],
+		"description": "binary exponentiation"
+	},
+
+	"extended euclidean algorithm for gcd": {
+		"prefix": "sfgcd",
+		"body": [
+			"int gcdExtended(int a, int b, int &x, int &y) {",
+			"    if (b == 0) { //base case",
+			"        x = 1;",
+			"        y = 0;",
+			"        return a;",
+			"    }",
+			"    int x1, y1; //to store results of recursive call",
+			"    int gcd = gcdExtended(b, a % b, x1, y1);",
+			"    //update x and y using results of recursive call ",
+			"    x = y1;",
+			"    y = x1 - y1 * (a / b);",
+			"    return gcd;",
+			"}"
+		],
+		"description": "extended euclidean algorithm for gcd"
+	},
+
+	"sieve of eratosthenes for prime numbers": {
+		"prefix": "sfsieve",
+		"body": [
+			"void sieveOfEratosthenes(int n) {",
+			"    bool prime[n + 1];",
+			"    memset(prime, 1, sizeof(prime));",
+			"    for (int p = 2; p*p <= n; p++) {",
+			"        if (prime[p]) {",
+			"            for (int i = p*p; i <= n; i += p) {",
+			"                prime[i] = 0;",
+			"            }",
+			"        }",
+			"    }",
+			"    for (int p = 2; p <= n; p++) {",
+			"        if (prime[p]) {",
+			"            cout << p << \" \";",
+			"        }",
+			"    }",
+			"}"
+		],
+		"description": "sieve of eratosthenes for prime numbers"
+	},
+
+	"precomputation of factorials and inverse_factorials": {
+		"prefix": "sfncr",
+		"body": [
+			"vector<int> fact, inv_fact;",
+			"",
+			"void precompute(int N) {",
+			"    fact.resize(N+1);",
+			"    inv_fact.resize(N+1);",
+			"",
+			"    fact[0] = 1;",
+			"    for (int i=1; i<=N; i++) {",
+			"        fact[i] = 1ll * fact[i-1] * i % mod;",
+			"    }",
+			"",
+			"    inv_fact[N] = binexp(fact[N], mod-2);",
+			"    for (int i=N-1; i>=0; i--) {",
+			"        inv_fact[i] = 1ll * inv_fact[i+1] * (i+1) % mod;",
+			"    }",
+			"}",
+			"",
+			"int ncr(int n, int r) {",
+			"    if (r>n || r<0 || n<0) return 0;",
+			"    return 1ll * fact[n] * inv_fact[r] % mod * inv_fact[n-r] % mod;",
+			"}"
+		],
+		"description": "precomputation of factorials and inverse_factorials"
+	},
+
+	"depth first search graph traversal": {
+		"prefix": "sfdfs",
+		"body": [
+			"void dfs(int cur, vector<vector<int>>& adj, vector<bool>& vis) {",
+			"    vis[cur] = 1;",
+			"    for(int nxt : adj[cur]) {",
+			"        if(!vis[nxt]) {",
+			"            dfs(nxt, adj, vis);",
+			"        }",
+			"    }",
+			"}"
+		],
+		"description": "depth first search graph traversal"
+	},
+
+	"breadth first search graph traversal": {
+		"prefix": "sfbfs",
+		"body": [
+			"void bfs(int src, vector<vector<int>>& adj) {",
+			"    const int n = adj.size();",
+			"    queue<int> q;",
+			"    vector<bool> vis(n, 0);",
+			"    q.push(src);",
+			"    vis[src] = 1;",
+			"    while(!q.empty()) {",
+			"        int cur = q.front();",
+			"        q.pop();",
+			"        for(int nxt : adj[cur]) {",
+			"            if(!vis[nxt]) {",
+			"                q.push(nxt);",
+			"                vis[nxt] = 1;",
+			"            }",
+			"        }",
+			"    }",
+			"}"
+		],
+		"description": "breadth first search graph traversal"
+	},
+
+	"dijkstra graph algorithm for single source shortest path": {
+		"prefix": "sfdijkstra",
+		"body": [
+			"vector<int> dijkstra(int src, vector<vector<pair<int,int>>>& graph) {",
+			"    vector<int> distances(graph.size(), INT_MAX);",
+			"    distances[src] = 0;",
+			"    priority_queue<pair<int,int>, vector<pair<int,int>>, greater<pair<int,int>>> pq;",
+			"    pq.push({0,src});",
+			"    while(!pq.empty()) {",
+			"        int cur_dist = pq.top().first;",
+			"        int cur_node = pq.top().second;",
+			"        pq.pop();",
+			"        if(cur_dist > distances[cur_node]) continue;",
+			"        for(pair<int,int>& neighbor : graph[cur_node]) {",
+			"            int neighbor_node = neighbor.first;",
+			"            int weight = neighbor.second;",
+			"            int distance = cur_dist + weight;",
+			"            if(distance < distances[neighbor_node]) {",
+			"                distances[neighbor_node] = distance;",
+			"                pq.push({distance, neighbor_node});",
+			"            }",
+			"        }",
+			"    }",
+			"    return distances;",
+			"}"
+		],
+		"description": "dijkstra graph algorithm for single source shortest path"
+	},
+
+	"bellman ford graph algorithm for single source shortest path": {
+		"prefix": "sfbellmanford",
+		"body": [
+			"vector<int> bellman_ford(int V, vector<vector<int>>& edges, int S) {",
+			"    vector<int> dist(V, INT_MAX);",
+			"    dist[S] = 0;",
+			"    for (int i = 0; i < V - 1; i++) {",
+			"        for (auto it : edges) {",
+			"            int u = it[0];",
+			"            int v = it[1];",
+			"            int wt = it[2];",
+			"            if (dist[u] != INT_MAX && dist[u] + wt < dist[v]) {",
+			"                dist[v] = dist[u] + wt;",
+			"            }",
+			"        }",
+			"    }",
+			"    //Nth relaxation to check negative cycle",
+			"    for (auto it : edges) {",
+			"        int u = it[0];",
+			"        int v = it[1];",
+			"        int wt = it[2];",
+			"        if (dist[u] != INT_MAX && dist[u] + wt < dist[v]) {",
+			"            return {-1};",
+			"        }",
+			"    }",
+			"    return dist;",
+			"}"
+		],
+		"description": "bellman ford graph algorithm for single source shortest path"
+	},
+
+	"flloyd warshall graph algorithm for pairwise shortest distance": {
+		"prefix": "sfflloydwarshall",
+		"body": [
+			"void flloyd_warshall(vector<vector<int>>&matrix) {",
+			"    int n = matrix.size();",
+			"    for (int i = 0; i < n; i++) {",
+			"        for (int j = 0; j < n; j++) {",
+			"            if (matrix[i][j] == -1) {",
+			"                matrix[i][j] = 1e9;",
+			"            }",
+			"            if (i == j) matrix[i][j] = 0;",
+			"        }",
+			"    }",
+			"",
+			"    for (int k = 0; k < n; k++) {",
+			"        for (int i = 0; i < n; i++) {",
+			"            for (int j = 0; j < n; j++) {",
+			"                matrix[i][j] = min(matrix[i][j], matrix[i][k] + matrix[k][j]);",
+			"            }",
+			"        }",
+			"    }",
+			"",
+			"    for (int i = 0; i < n; i++) {",
+			"        for (int j = 0; j < n; j++) {",
+			"            if (matrix[i][j] == 1e9) {",
+			"                matrix[i][j] = -1;",
+			"            }",
+			"        }",
+			"    }",
+			"}"
+		],
+		"description": "flloyd warshall graph algorithm for pairwise shortest distance"
+	},
+
+	"class for disjoint set union": {
+		"prefix": "sfdsu",
+		"body": [
+			"class DSU {",
+			"public:",
+			"    vector<int> parent, size;",
+			"    int components;",
+			"",
+			"    DSU(int n) {",
+			"        components = n;",
+			"        parent.resize(n+1);",
+			"        size.resize(n+1, 1);",
+			"        for (int i=0; i<=n; i++) parent[i] = i;",
+			"    }",
+			"",
+			"    int Find(int x) {",
+			"        if (parent[x] != x) {",
+			"            parent[x] = Find(parent[x]); //path compression",
+			"        }",
+			"        return parent[x];",
+			"    }",
+			"",
+			"    bool Union(int x, int y) {",
+			"        int rootX = Find(x), rootY = Find(y);",
+			"        if (rootX == rootY) return false;",
+			"        if (size[rootX] < size[rootY]) swap(rootX, rootY);",
+			"        parent[rootY] = rootX;",
+			"        size[rootX] += size[rootY];",
+			"        components--;",
+			"        return true;",
+			"    }",
+			"",
+			"    bool isConnected() {",
+			"        return components == 1;",
+			"    }",
+			"};"
+		],
+		"description": "class for disjoint set union"
+	},
+}
